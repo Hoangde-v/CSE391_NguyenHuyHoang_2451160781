@@ -11,3 +11,9 @@ khách hàng
 9.type="file" → Nút upload file → Có thể giới hạn loại file → Dùng upload ảnh đánh giá sản phẩm
 10.type="submit" → Nút bấm gửi form → Không validation, chỉ trigger submit → Dùng nút "Đặt hàng"
 
+Câu A2:
+TH1: Browser thông báo lỗi để trống khu vực nhập
+TH2: Browser thông báo lỗi định dạng email, phải có @
+TH3: Browser thông báo lỗi chỉ nhập phạm bi trong khoảng từ 1 đến 10
+TH4: Browser thông báo sai định dạng, phải là chữ số và phải có 10 chữ số, người dùng nhập abc123 là sai
+TH5: Browser thông báo mật khẩu ko đủ độ dài, tối thiểu là 8 ký tự người dùng mới chỉ nhập 3 kí tự
