@@ -22,3 +22,11 @@ Câu A3:
 1. Để cho người dùng có thể nhận biết được ô input đấy nên nhập thông tin gì.
 2. Dùng khi có nhiều nhóm liên quan, Ví dụ thực tế như khi tạo lập phương thức thanh toán, sẽ có nhiều phương thức thanh toán -> cho vào 1 fieldset.
 3. Dùng cho button icon. không nên dùng cả label và arial label bởi vì có thể gây xung đột cho trình đọc.
+
+Câu 4A:
+1. Thuộc tính lazy sẽ giúp ảnh chỉ load khi người dùng scroll đến ảnh đấy.Nó giúp giảm thời gin load trang, tăng hiệu năng.Không nên dùng khi nó là ảnh chính của trang, ảnh các icon, ảnh banner trên đầu của trang web.
+2. Không phải trang web nào cũng hỗ trợ source mà ta gắn vào nên ta để nhiều source để có thể phù hợp cho nhiều loại trang web.3 format video phổ biến nhất là: mp4, webm, ogg
+3. Khi ảnh bị lỗi hoặc chưa load kịp alt sẽ hiển thị dòng chữ ở trong ảnh đó để chúng ta biết được đó không phải lỗi hệ thống.
+alt cho ip16 = "Ảnh ip 16 cực đẹp"
+alt cho trang trí = "Đâyy là ảnh trang trí siêu ngầu"
+alt cho biểu đồ doanh thu = "Biểu đồ doanh thu của Q1/2026"
