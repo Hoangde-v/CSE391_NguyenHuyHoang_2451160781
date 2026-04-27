@@ -30,3 +30,8 @@ Câu 4A:
 alt cho ip16 = "Ảnh ip 16 cực đẹp"
 alt cho trang trí = "Đâyy là ảnh trang trí siêu ngầu"
 alt cho biểu đồ doanh thu = "Biểu đồ doanh thu của Q1/2026"
+
+Câu A5:
+Dùng img khi chỉ muốn để hiển thị, còn dùng figure khi muốn ảnh là nội dung chính, thêm chú thích và mô tả để cho semantic
+
+Dùng cách 1 khi chỉ muốn để ảnh nhỏ như avatar, hoặc là các icon còn cách 2 khi muốn ảnh có ý nghía riêng của nó hoặc cần chú thích, như các trng sản phẩm của web e-commerce, các ảnh trong bài báo, blog
