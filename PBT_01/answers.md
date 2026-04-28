@@ -193,3 +193,5 @@ Lý do thứ hai là Accessibility. Những người dùng trình đọc màn h�
 Ví dụ cụ thể: một trang blog nếu dùng <article> cho mỗi bài viết, screen reader có thể nhận diện từng bài là một khối độc lập và cho phép người dùng duyệt nhanh theo bài. Nếu thay bằng <div class="post">, chức năng này không còn rõ ràng nữa.
 
 Tuy nhiên, không phải lúc nào <div> cũng sai. Trong thực tế, <div> rất hữu ích khi bạn chỉ cần một khối để chia layout hoặc áp dụng CSS, ví dụ như tạo grid sản phẩm hoặc nhóm các phần tử nhỏ lại. Nói chung, semantic HTML giúp trang “có nghĩa”, còn <div> giúp bạn “dễ bố trí” — nên dùng kết hợp chứ không nên bỏ một trong hai.
+
+Link video PBT_01: https://drive.google.com/file/d/1Nnh1fXxGeXOn7hmMLH81mOfhgG6QYUzI/view?usp=drive_link    
