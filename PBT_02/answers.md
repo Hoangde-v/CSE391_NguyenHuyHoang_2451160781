@@ -112,3 +112,5 @@ Dựng form cơ bản:
     <button type="submit">Đăng ký</button>
 
 </form>
+
+Link video: https://drive.google.com/file/d/1TqPWm-TuI4S_dHOS0j1rQ8hX6nrLU4RQ/view?usp=sharing  
