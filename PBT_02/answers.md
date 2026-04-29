@@ -35,3 +35,80 @@ Câu A5:
 Dùng img khi chỉ muốn để hiển thị, còn dùng figure khi muốn ảnh là nội dung chính, thêm chú thích và mô tả để cho semantic
 
 Dùng cách 1 khi chỉ muốn để ảnh nhỏ như avatar, hoặc là các icon còn cách 2 khi muốn ảnh có ý nghía riêng của nó hoặc cần chú thích, như các trng sản phẩm của web e-commerce, các ảnh trong bài báo, blog
+
+Câu C1:
+-Lỗi 1:Input "Tên" không có <label for> (vi phạm accessibility)
+Sửa: <label for="name">Tên:</label> <input type="text" id="name" name="name" required>
+-Lỗi 2:Input email không có <label> (vi phạm accessibility)
+Sửa: <label for="email">Email:</label> <input type="email" id="email" name="email" placeholder="Email của bạn" required>
+-Lỗi 3:Password không có label (vi phạm accessibility)
+Sửa: <label for="password">Mật khẩu:</label> <input type="password" id="password" name="password" placeholder="Mật khẩu" required>
+-Lỗi 4:Confirm password không có label và không có name (vi phạm accessibility)
+Sửa: <label for="confirm">Nhập lại mật khẩu:</label> <input type="password" id="confirm" name="confirm" placeholder="Nhập lại mật khẩu" required>
+-Lỗi 5:Phone dùng type="text" (sai best practice)
+Sửa: <label for="phone">Phone:</label> <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" placeholder="0901234567" required>
+-Lỗi 6:Dùng value thay vì placeholder
+Sửa: <label for="phone">Phone:</label> <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" placeholder="0901234567" required>
+-Lỗi 7:select> không có label và name (vi phạm accessibility)
+Sửa: <label for="city">Thành phố:</label>
+<select id="city" name="city" required>
+    <option value="">--Chọn--</option>
+    <option value="hn">Hà Nội</option>
+    <option value="hcm">TP.HCM</option>
+</select> 
+-Lỗi 8:Checkbox không có input + không có liên kết label
+Sửa: <input type="checkbox" id="terms" name="terms" required> <label for="terms">Tôi đồng ý điều khoản</label>
+
+Câu C2:
+1.CMND/CCCD: đúng 12 chữ số: pattern: ^[0-9]{12}$
+Số tài khoản: 10-15 chữ số: Pattern: ^[0-9]{10,15}$
+2.Chỉ dùng validate HTML5 thì không đủ an toàn cho ngân hàng tại vì:
+-HTML validation chỉ chạy ở trình duyệt
+-Người dùng có thể:
++)Tắt validation
++)Sửa request (DevTools, Postman…)
++)Không kiểm soát được dữ liệu thực sự gửi lên server
+
+3.Ba loại validation mà HTML5 KHÔNG THỂ làm được (phải dùng JavaScript) là:
+-So sánh giữa các field VD: mật khẩu với nhập lại mật khẩu
+-logic nghiệp vụ, VD:CMND có tồn tại trong hệ thống không, Email đã đăng ký chưa, Số tài khoản có hợp lệ theo ngân hàng
+-Validation động theo điều kiện, VD:Chọn quốc gia → đổi format số điện thoại
+
+4.Rủi ro bảo mật nếu chỉ validate trên Frontend mà không validate Backend:
+-Rủi ro 1: Bypass validation
+-Rủi ro 2: Injection attack
+
+Dựng form cơ bản:
+<form action="#" method="POST">
+
+    <!-- CMND/CCCD -->
+    <label for="cccd">CMND/CCCD:</label><br>
+    <input type="text" id="cccd" name="cccd"
+           placeholder="Nhập 12 chữ số"
+           pattern="^[0-9]{12}$"
+           required><br><br>
+
+    <!-- Số tài khoản -->
+    <label for="account">Số tài khoản:</label><br>
+    <input type="text" id="account" name="account"
+           placeholder="10-15 chữ số"
+           pattern="^[0-9]{10,15}$"
+           required><br><br>
+
+    <!-- Email -->
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email"
+           placeholder="example@gmail.com"
+           required><br><br>
+
+    <!-- PIN -->
+    <label for="pin">Mã PIN:</label><br>
+    <input type="password" id="pin" name="pin"
+           placeholder="6 chữ số"
+           pattern="^[0-9]{6}$"
+           required><br><br>
+
+    <!-- Submit -->
+    <button type="submit">Đăng ký</button>
+
+</form>
