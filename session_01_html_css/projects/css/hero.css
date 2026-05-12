@@ -1,0 +1,27 @@
+.hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+    color: var(--color-light);
+}
+
+.cta-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: var(--color-light);
+    color: var(--color-primary);
+    border: none;
+    border-radius: 24px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    text-decoration: none;
+}
+
+.highlight {
+    color: orange;
+}
