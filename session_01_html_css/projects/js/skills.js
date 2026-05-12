@@ -6,7 +6,7 @@
       const percent = bar.dataset.percent || bar.getAttribute('data-percent') || '0';
       bar.style.width = percent + '%';
     });
-  };
+  }; 
 
   if ('IntersectionObserver' in window) {
     const section = document.querySelector('.skills-section');

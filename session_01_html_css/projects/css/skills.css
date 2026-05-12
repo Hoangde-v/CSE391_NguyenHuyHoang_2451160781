@@ -72,3 +72,12 @@
 @media (max-width: 768px) {
     .about-grid { grid-template-columns: 1fr; }
 }
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+@media (max-width: 768px) {
+    .skills-grid { grid-template-columns: 1fr; }
+}
