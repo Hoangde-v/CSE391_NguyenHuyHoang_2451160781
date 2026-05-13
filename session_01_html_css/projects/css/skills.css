@@ -13,13 +13,6 @@
     color: var(--color-dark);
 }
 
-.skills-grid {
-    display: grid;
-    grid-template-columns: 2fr 2fr;
-    gap: 1rem;
-    align-items: start;
-}
-
 .skill-item {
     background: #ffffff;
     padding: 1rem;

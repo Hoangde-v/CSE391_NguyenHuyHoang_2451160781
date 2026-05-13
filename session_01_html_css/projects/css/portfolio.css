@@ -1,0 +1,41 @@
+.portfolio-section {
+    padding: 60px 0;
+    text-align: center;
+}
+
+.portfolio-filter {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.filter-btn {
+    display: inline-block;
+    padding: 8px 24px;
+    margin-bottom: 28px;
+    border: 1px solid var(--color-primary);
+    background-color: transparent;
+    cursor: pointer;
+    color: var(--color-primary);
+    transition:  0.3s ease;
+    border-radius: 20px;
+}
+.active, .filter-btn:hover {
+    background-color: var(--color-primary);
+    color: #fff;
+}
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+}
+.portfolio-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+}
+.portfolio-item img {
+    aspect-ratio: 4/3;
+    width: 100%;
+    object-fit: cover;
+}
+
