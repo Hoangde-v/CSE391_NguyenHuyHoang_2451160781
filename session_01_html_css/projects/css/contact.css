@@ -2,14 +2,6 @@
   background-color: #f0f2f8;
   padding: 60px 20px;
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-}
-
-.container {
-  width: 100%;
-  max-width: 1000px;
-  margin: 0 auto;
 }
 
 .contact-section h2 {
@@ -22,12 +14,12 @@
 
 .contact-wrapper {
   display: flex;
-  align-items: flex-start;
-  gap: 48px;
+  justify-content: space-between;
+  gap: 280px;
 }
 
 .contact-info {
-  flex: 0 0 280px;
+  flex: 0 0 360px;
   padding: 16px 0;
 }
 
