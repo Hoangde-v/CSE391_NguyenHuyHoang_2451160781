@@ -4,7 +4,7 @@ Câu A1 (10đ) — 5 Loại Positioning
 
 - Vẫn chiếm chỗ trong flow: Có
 - Tham chiếu vị trí: Theo flow mặc định của tài liệu
-- Cuộn theo trang: \*Có
+- Cuộn theo trang: \Có
 - Use case: Layout mặc định của trang
 
 2.  relative
@@ -66,7 +66,7 @@ Bố cục:
 - display: flex mặc định là sắp xếp theo hàng ngang (flex-direction: row)
 - flex: 1 nghĩa là các item chia đều không gian
 
-Kết quả: **1 hàng, 4 cột bằng nhau**
+Kết quả: 1 hàng, 4 cột bằng nhau
 
 Sơ đồ bố cục:
 
@@ -89,9 +89,9 @@ Bố cục:
 - margin trái phải tổng cộng khoảng 5%
 - một item gần bằng 50% chiều ngang
 
-=> mỗi hàng chứa khoảng **2 item**
+=> mỗi hàng chứa khoảng 2 item
 
-Kết quả: **3 hàng, 2 cột**
+Kết quả: 3 hàng, 2 cột
 
 Sơ đồ bố cục:
 
@@ -120,7 +120,7 @@ Bố cục:
 - justify-content: space-between → item đầu sát trái, item cuối sát phải, item giữa ở khoảng giữa
 - align-items: center → căn giữa theo chiều dọc
 
-Kết quả: **3 item nằm trên cùng một hàng và cách đều nhau**
+Kết quả: 3 item nằm trên cùng một hàng và cách đều nhau
 
 Sơ đồ bố cục:
 
@@ -139,13 +139,13 @@ Có 3 item.
 
 Dự đoán bố cục:
 
-- Grid gồm **3 cột**
+- Grid gồm 3 cột
 - cột 1 rộng 200px
 - cột 2 chiếm toàn bộ phần còn lại (1fr)
 - cột 3 rộng 200px
 - khoảng cách giữa cột là 20px
 
-Kết quả: **1 hàng, 3 cột**
+Kết quả: 1 hàng, 3 cột
 
 Sơ đồ bố cục:
 
@@ -157,13 +157,13 @@ text
 
 ---
 
-/* Trường hợp 5 */
+/_ Trường hợp 5 _/
 .container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 
 Có 7 item.
 Bố cục:
 
-- repeat(3, 1fr) → grid có **3 cột bằng nhau**
+- repeat(3, 1fr) → grid có 3 cột bằng nhau
 - 7 item sẽ tự động xuống hàng
 
 Kết quả:
@@ -172,9 +172,9 @@ Kết quả:
 - Hàng 2: 3 item
 - Hàng 3: còn 1 item
 
-=> **3 hàng, 3 cột**
+=> 3 hàng, 3 cột
 
-Item cuối (item7) nằm ở **hàng 3, cột 1**
+Item cuối (item7) nằm ở hàng 3, cột 1
 
 Sơ đồ bố cục:
 
@@ -190,3 +190,234 @@ text
 +-------+
 | item7 |
 +-------+
+
+Câu C1 (10đ)
+
+1.  Navigation bar ngang (logo + menu + buttons)
+
+Chọn: Flexbox
+
+Giải thích:  
+Navbar là layout theo một chiều (horizontal), các phần tử nằm trên cùng một hàng (logo, menu, buttons). Flexbox giúp căn chỉnh dễ dàng bằng `justify-content` và `align-items`, phù hợp cho navigation bar.
+
+---
+
+2.  Lưới ảnh Instagram (3 cột đều nhau, số ảnh không biết trước)
+    Chọn: Grid
+    Giải thích:  
+    Lưới ảnh cần chia thành nhiều hàng và nhiều cột đều nhau, số lượng ảnh có thể thay đổi.
+
+Câu C2 (10đ) — Debug Flexbox
+
+---
+
+Lỗi 1: Cards không đều chiều cao — nút "Mua" bị nhảy lên/xuống
+
+Nguyên nhân
+
+Các card có nội dung khác nhau (tên sản phẩm dài/ngắn khác nhau) nên chiều cao card không đều.
+
+Button không được đẩy xuống cuối card nên bị lệch vị trí giữa các card.
+
+---
+
+Code lỗi
+
+```css
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card {
+  width: 30%;
+  margin: 1.5%;
+}
+
+.card img {
+  width: 100%;
+}
+
+.card h3 {
+  font-size: 18px;
+}
+
+.card .btn {
+  padding: 10px;
+}
+```
+
+---
+
+Cách sửa
+
+Biến `.card` thành Flexbox theo chiều dọc và dùng:
+
+```css
+margin-top: auto;
+```
+
+để nút luôn dính xuống đáy card.
+
+Code sửa
+
+```css
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card {
+  width: 30%;
+  margin: 1.5%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.card img {
+  width: 100%;
+}
+
+.card h3 {
+  font-size: 18px;
+}
+
+.card .btn {
+  padding: 10px;
+
+  margin-top: auto;
+}
+```
+
+Kết quả sau khi sửa
+
+- Các card có chiều cao đồng đều hơn
+- Nút "Mua" luôn nằm ở đáy card
+- Không còn hiện tượng nút nhảy lên/xuống
+---
+
+Lỗi 2: Item không nằm giữa màn hình
+
+Nguyên nhân
+
+`.hero` đã dùng `display: flex` nhưng chưa có:
+
+- `justify-content: center`
+- `align-items: center`
+
+Mặc định Flexbox sẽ đặt item ở góc trên bên trái (`flex-start`).
+
+---
+Code lỗi
+```css
+.hero {
+  height: 100vh;
+  display: flex;
+}
+
+.hero-content {
+  text-align: center;
+}
+```
+
+---
+
+Cách sửa
+
+Thêm:
+
+```css
+justify-content: center;
+align-items: center;
+```
+
+để căn giữa ngang và dọc.
+
+Code sửa
+
+```css
+.hero {
+  height: 100vh;
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-content {
+  text-align: center;
+}
+```
+Kết quả sau khi sửa
+- Nội dung nằm chính giữa màn hình
+- Căn giữa theo cả chiều ngang và chiều dọc
+
+
+Lỗi 3: Sidebar bị co lại khi content quá dài
+
+Nguyên nhân
+
+Trong Flexbox, item mặc định có thể bị co (`flex-shrink: 1`).
+
+Khi nội dung quá dài, sidebar bị ép nhỏ lại dù đã đặt:
+
+```css
+width: 250px;
+```
+
+---
+
+Code lỗi
+
+```css
+.layout {
+  display: flex;
+}
+
+.sidebar {
+  width: 250px;
+}
+
+.content {
+  flex: 1;
+}
+```
+
+---
+
+Cách sửa
+
+Ngăn sidebar bị co bằng:
+
+```css
+flex-shrink: 0;
+```
+
+hoặc dùng:
+
+```css
+flex: 0 0 250px;
+```
+
+Code sửa
+
+```css
+.layout {
+  display: flex;
+}
+
+.sidebar {
+  width: 250px;
+  flex-shrink: 0;
+}
+
+.content {
+  flex: 1;
+}
+```
+
+Kết quả sau khi sửa
+
+- Sidebar luôn giữ nguyên chiều rộng `250px`
+- Không bị co lại khi content quá dài
