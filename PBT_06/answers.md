@@ -207,7 +207,6 @@ col-sm-12
 
 vì mobile đã được xử lý sẵn.
 
-
 # Câu A2 (10đ) — Utilities & Components
 
 ## 1. Giải thích class `d-none d-md-block`
@@ -245,9 +244,7 @@ display: block;
 Ví dụ:
 
 ```html
-<div class="d-none d-md-block">
-    Sidebar
-</div>
+<div class="d-none d-md-block">Sidebar</div>
 ```
 
 #### Mobile (`<768px`)
@@ -288,10 +285,10 @@ display: block;
 
 ### Responsive behavior
 
-| Kích thước màn hình | Hiển thị? |
-|---|---|
-| `<768px` | ❌ Ẩn |
-| `≥768px` | ✅ Hiển thị |
+| Kích thước màn hình | Hiển thị?   |
+| ------------------- | ----------- |
+| `<768px`            | ❌ Ẩn       |
+| `≥768px`            | ✅ Hiển thị |
 
 ---
 
@@ -306,9 +303,7 @@ Thường dùng cho:
 Ví dụ:
 
 ```html
-<aside class="d-none d-md-block">
-    Sidebar Filter
-</aside>
+<aside class="d-none d-md-block">Sidebar Filter</aside>
 ```
 
 → mobile ẩn sidebar, desktop hiện sidebar.
@@ -336,14 +331,14 @@ Trong đó:
 
 Side:
 
-| Ký hiệu | Ý nghĩa |
-|---|---|
-| `t` | top |
-| `b` | bottom |
-| `s` | start (left) |
-| `e` | end (right) |
-| `x` | left + right |
-| `y` | top + bottom |
+| Ký hiệu | Ý nghĩa      |
+| ------- | ------------ |
+| `t`     | top          |
+| `b`     | bottom       |
+| `s`     | start (left) |
+| `e`     | end (right)  |
+| `x`     | left + right |
+| `y`     | top + bottom |
 
 ---
 
@@ -459,11 +454,9 @@ Ví dụ:
 
 ```html
 <div class="d-flex flex-column">
-    <h3>Title</h3>
-    <p class="mb-auto">
-        Description
-    </p>
-    <button>Buy</button>
+  <h3>Title</h3>
+  <p class="mb-auto">Description</p>
+  <button>Buy</button>
 </div>
 ```
 
@@ -476,7 +469,7 @@ Ví dụ:
 ## A. `.container`
 
 ```html
-<div class="container">
+<div class="container"></div>
 ```
 
 ### Đặc điểm
@@ -504,7 +497,7 @@ Phù hợp:
 ## B. `.container-fluid`
 
 ```html
-<div class="container-fluid">
+<div class="container-fluid"></div>
 ```
 
 ### Đặc điểm
@@ -535,7 +528,7 @@ Phù hợp:
 ## C. `.container-md`
 
 ```html
-<div class="container-md">
+<div class="container-md"></div>
 ```
 
 ### Đặc điểm
@@ -559,11 +552,11 @@ Phù hợp:
 
 ## So sánh nhanh
 
-| Class | Mobile | Tablet/Desktop |
-|---|---|---|
-| `.container` | responsive width | fixed max-width |
-| `.container-fluid` | full width | full width |
-| `.container-md` | full width | fixed width từ md |
+| Class              | Mobile           | Tablet/Desktop    |
+| ------------------ | ---------------- | ----------------- |
+| `.container`       | responsive width | fixed max-width   |
+| `.container-fluid` | full width       | full width        |
+| `.container-md`    | full width       | fixed width từ md |
 
 ---
 
@@ -573,7 +566,345 @@ Phù hợp:
 - `.container-fluid` → luôn full width.
 - `.container-md` → full width trên mobile, fixed width từ tablet trở lên.
 
-Class:
+# Câu C1 (10đ) — Tailwind vs CSS thuần
+
+Ở đây em lấy ví dụ component **product card** mà em đã làm ở bài trước để so sánh giữa CSS thuần và TailwindCSS.
+
+## 1. CSS thuần
+
+Ví dụ khi dùng CSS thuần:
+
+### HTML
 
 ```html
-d-none
+<div class="card">
+    <img class="card-image" src="product.jpg">
+
+    <div class="card-body">
+        <h3 class="card-title">
+            Product Name
+        </h3>
+
+        <p>$120</p>
+
+        <button class="buy-btn">
+            Buy Now
+        </button>
+    </div>
+</div>
+```
+
+### CSS
+
+```css
+.card{
+    width:300px;
+    background:white;
+    border-radius:12px;
+}
+
+.buy-btn{
+    background:blue;
+    color:white;
+}
+```
+
+Theo em thấy thì CSS thuần nhìn khá dễ hiểu vì HTML ngắn, đọc vào biết ngay đây là card, button hay image. Muốn chỉnh style thì mở file CSS ra sửa.
+
+Ví dụ muốn đổi màu nút thì chỉ cần sửa:
+
+```css
+.buy-btn{
+    background:red;
+}
+```
+
+---
+
+## 2. TailwindCSS
+
+Ví dụ cùng component nhưng viết bằng Tailwind:
+
+```html
+<div class="w-[300px] bg-white rounded-xl shadow-lg">
+
+    <img src="product.jpg" class="w-full">
+
+    <div class="p-5">
+        <h3 class="text-lg font-bold">
+            Product Name
+        </h3>
+
+        <p>$120</p>
+
+        <button class="bg-blue-500 text-white px-4 py-2 rounded">
+            Buy Now
+        </button>
+    </div>
+</div>
+```
+
+Lúc mới nhìn em thấy hơi rối vì trong `class=""` có rất nhiều thứ. Nhưng sau khi tìm hiểu thì em hiểu là Tailwind cho viết style trực tiếp trong HTML nên không cần tạo file CSS riêng nhiều.
+
+---
+
+## 3. So sánh file HTML
+
+### CSS thuần
+
+Theo em thấy:
+
+**Ưu điểm**
+
+- HTML ngắn hơn
+- Nhìn sạch và dễ đọc hơn
+
+Ví dụ:
+
+```html
+<div class="card">
+```
+
+nhìn đơn giản.
+
+**Nhược điểm**
+
+- Muốn sửa giao diện phải chạy sang file CSS.
+- Nếu project lớn thì đôi khi CSS dễ bị ghi đè lung tung.
+
+---
+
+### TailwindCSS
+
+**Ưu điểm**
+
+- Chỉnh giao diện rất nhanh.
+- Không cần tạo nhiều class CSS.
+
+Ví dụ muốn thêm bo góc hay padding chỉ cần thêm:
+
+```html
+rounded p-4
+```
+
+**Nhược điểm**
+
+- HTML dài hơn nhiều.
+- Người mới nhìn sẽ hơi khó đọc.
+
+Ví dụ:
+
+```html
+class="bg-blue-500 text-white px-4 py-2 rounded"
+```
+
+trông hơi nhiều chữ.
+
+---
+
+## 4. Maintainability (dễ sửa, dễ đọc)
+
+Theo cảm nhận của em:
+
+Nếu project nhỏ thì CSS thuần dễ đọc hơn vì HTML ngắn.
+
+Nhưng nếu giao diện nhiều component thì Tailwind sửa nhanh hơn vì chỉ sửa ngay trong HTML, không phải nhảy qua lại giữa file HTML và CSS.
+
+Ví dụ muốn đổi màu:
+
+CSS thuần:
+
+```css
+.buy-btn{
+    background:red;
+}
+```
+
+Tailwind:
+
+```html
+bg-red-500
+```
+
+đổi trực tiếp luôn.
+
+---
+
+## 5. Reusability (tái sử dụng)
+
+### CSS thuần
+
+CSS thuần tái sử dụng bằng class.
+
+Ví dụ:
+
+```html
+<div class="card"></div>
+<div class="card"></div>
+<div class="card"></div>
+```
+
+chỉ cần viết `.card` một lần.
+
+---
+
+### TailwindCSS
+
+Tailwind thường copy lại utility classes.
+
+Ví dụ:
+
+```html
+class="bg-white rounded-xl shadow-lg p-4"
+```
+
+Ngoài ra em có tìm hiểu thì Tailwind còn có `@apply` để gom class lại:
+
+```css
+.product-card{
+    @apply bg-white rounded-xl shadow-lg p-4;
+}
+```
+
+sau đó dùng:
+
+```html
+<div class="product-card"></div>
+```
+
+đỡ bị dài quá.
+
+---
+
+## Kết luận C1
+
+Theo em thấy:
+
+- CSS thuần dễ đọc hơn khi mới học.
+- Tailwind lúc đầu nhìn hơi rối nhưng làm nhanh hơn.
+- Nếu project nhỏ thì CSS thuần ổn.
+- Nếu UI nhiều component thì Tailwind tiện hơn.
+
+---
+
+# Câu C2 (10đ) — Performance
+
+## 1. Vì sao Tailwind CSS cuối cùng nhỏ hơn Bootstrap?
+
+Lúc đầu em thấy hơi lạ vì HTML Tailwind rất dài, nhiều class, tưởng sẽ nặng hơn Bootstrap.
+
+Nhưng sau khi đọc thì em hiểu là:
+
+Bootstrap có rất nhiều CSS viết sẵn như:
+
+- button
+- navbar
+- modal
+- table
+- accordion
+- grid
+- alert
+
+Cho dù mình không dùng hết thì vẫn tải nguyên framework.
+
+Ví dụ em chỉ dùng button với card nhưng Bootstrap vẫn load nhiều thứ khác.
+
+Trong khi đó Tailwind chỉ build những class mình dùng.
+
+Ví dụ project chỉ dùng:
+
+```html
+flex
+bg-red-500
+p-4
+rounded
+```
+
+thì nó chỉ tạo CSS cho mấy class đó.
+
+Nên file CSS cuối cùng thường nhỏ hơn.
+
+---
+
+## 2. PurgeCSS / Tailwind JIT là gì?
+
+Theo em hiểu đơn giản:
+
+Tailwind sẽ quét project xem class nào đang dùng thật.
+
+Ví dụ em dùng:
+
+```html
+bg-red-500
+p-4
+flex
+```
+
+thì nó giữ lại.
+
+Những class không dùng như:
+
+```html
+bg-green-500
+shadow-2xl
+m-20
+```
+
+thì bỏ đi.
+
+Nên CSS nhẹ hơn.
+
+JIT (Just In Time) thì giống như viết tới đâu generate CSS tới đó, không build hết từ đầu.
+
+Ví dụ em viết:
+
+```html
+w-72
+```
+
+thì Tailwind chỉ tạo CSS cho:
+
+```html
+w-72
+```
+
+---
+
+## 3. Khi nào không nên dùng TailwindCSS?
+
+### Trường hợp 1: Website nhỏ
+
+Ví dụ:
+
+- landing page đơn giản
+- website giới thiệu cá nhân
+
+Theo em thì CSS thuần nhanh hơn vì không cần quá nhiều utility classes.
+
+---
+
+### Trường hợp 2: Team chưa quen Tailwind
+
+Người mới nhìn:
+
+```html
+class="flex justify-center items-center p-6 bg-red-500"
+```
+
+sẽ hơi rối.
+
+Trong khi:
+
+```html
+class="product-card"
+```
+
+dễ hiểu hơn.
+
+---
+
+## Kết luận C2
+
+Theo em thấy Tailwind mạnh ở tốc độ làm UI và tối ưu CSS.
+
+Nhưng không phải lúc nào cũng cần dùng. Với website nhỏ hoặc người mới học thì CSS thuần hoặc Bootstrap đôi khi dễ làm hơn.
