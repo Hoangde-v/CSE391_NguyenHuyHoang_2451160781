@@ -348,3 +348,24 @@ border-radius: 5px;
 @extend .button;
 background: blue;
 }
+
+B3:
+# SCSS Compile Command
+
+Lệnh compile SCSS sang CSS:
+
+```bash
+sass scss/style.scss responsive.css
+```
+
+Hoặc watch mode:
+
+```bash
+sass --watch scss/style.scss:responsive.css
+```
+
+Quy trình:
+
+```text
+style.scss → Sass Compile → responsive.css
+```
