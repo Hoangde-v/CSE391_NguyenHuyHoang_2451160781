@@ -350,6 +350,7 @@ background: blue;
 }
 
 B3:
+
 # SCSS Compile Command
 
 Lệnh compile SCSS sang CSS:
@@ -369,3 +370,431 @@ Quy trình:
 ```text
 style.scss → Sass Compile → responsive.css
 ```
+
+# Câu C1 (10đ) — Phân tích trang web thực (Shopee.vn)
+
+Website được chọn: Shopee Việt Nam
+
+Website:
+
+https://shopee.vn/
+
+---
+
+## 1. Mobile (375px)
+
+### Navigation thay đổi như thế nào?
+
+- Header được tối giản để phù hợp màn hình nhỏ.
+- Navigation ngang trên desktop không còn hiển thị đầy đủ.
+- Thanh tìm kiếm vẫn giữ vai trò trung tâm.
+- Nhiều menu được gom lại thành icon (menu, tài khoản, giỏ hàng, thông báo).
+- Không hiển thị quá nhiều liên kết ngang như desktop.
+
+### Lưới content thay đổi mấy cột?
+
+- Product grid thường hiển thị khoảng **2 cột** trên mobile.
+- Card sản phẩm nhỏ hơn để tận dụng không gian màn hình.
+
+### Elements nào bị ẩn trên mobile?
+
+Một số phần thường bị giảm hoặc ẩn:
+
+- Banner lớn nhiều cột
+- Sidebar navigation
+- Một số menu phụ/header links
+- Một số recommendation panel hoặc promotion section lớn
+
+### Font size có thay đổi không?
+
+Có.
+
+- Font nhỏ hơn desktop.
+- Heading, menu text và product text được giảm kích thước để tối ưu mobile.
+
+---
+
+## 2. Tablet (768px)
+
+### Navigation thay đổi như thế nào?
+
+- Header đầy đủ hơn mobile.
+- Thanh tìm kiếm lớn hơn.
+- Có nhiều menu hiển thị hơn.
+- Một số dropdown/category bắt đầu xuất hiện lại.
+
+### Lưới content thay đổi mấy cột?
+
+- Product grid khoảng **3–4 cột**.
+- Khoảng cách card rộng hơn mobile.
+
+### Elements nào bị ẩn?
+
+- Ít thành phần bị ẩn hơn mobile.
+- Một số block promotion hoặc sidebar vẫn được giản lược.
+
+### Font size có thay đổi không?
+
+Có.
+
+- Font lớn hơn mobile.
+- Khoảng cách giữa các phần tử thoáng hơn.
+
+---
+
+## 3. Desktop (1440px)
+
+### Navigation thay đổi như thế nào?
+
+- Navigation đầy đủ.
+- Header hiển thị nhiều liên kết ngang.
+- Category menu, account, notifications, cart hiển thị đầy đủ.
+- Không cần hamburger menu.
+
+### Lưới content thay đổi mấy cột?
+
+- Product grid thường hiển thị khoảng **5–6 cột** (tuỳ section).
+- Khoảng trắng nhiều hơn, card rộng hơn.
+
+### Elements nào bị ẩn?
+
+- Hầu như không bị ẩn.
+- Banner, recommendation section, category panel hiển thị đầy đủ.
+
+### Font size có thay đổi không?
+
+Có.
+
+- Heading lớn hơn.
+- Nội dung dễ đọc hơn.
+- Khoảng cách giữa các thành phần rộng hơn.
+
+---
+
+# So sánh Responsive Layout
+
+| Kích thước | Navigation                 | Product Grid | Thành phần ẩn       |
+| ---------- | -------------------------- | -----------: | ------------------- |
+| 375px      | Header tối giản, icon/menu |        2 cột | Sidebar, banner lớn |
+| 768px      | Navigation mở rộng hơn     |      3–4 cột | Ít thành phần bị ẩn |
+| 1440px     | Navigation đầy đủ          |      5–6 cột | Gần như không       |
+
+---
+
+# Media Queries tìm được trong DevTools
+
+Mở:
+
+F12 → DevTools → Inspect → Styles → search "@media"
+
+Shopee sử dụng responsive CSS với nhiều breakpoint để thay đổi layout theo kích thước màn hình. Responsive web thường dùng media queries để thay đổi navigation, grid và typography giữa mobile/tablet/desktop. :contentReference[oaicite:1]{index=1}
+
+### Ví dụ media query 1
+
+```css
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+  }
+}
+```
+
+Ý nghĩa:
+
+- Khi màn hình nhỏ hơn tablet, layout được chuyển để phù hợp mobile.
+
+---
+
+### Ví dụ media query 2
+
+```css
+@media (min-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+```
+
+Ý nghĩa:
+
+- Desktop hiển thị nhiều sản phẩm hơn trên cùng hàng.
+
+---
+
+# Kết luận
+
+Shopee sử dụng Responsive Web Design để thay đổi giao diện theo kích thước màn hình.
+
+- Mobile: giao diện tối giản, tập trung thao tác nhanh.
+- Tablet: hiển thị nhiều nội dung hơn.
+- Desktop: navigation và product grid đầy đủ.
+
+Trang sử dụng media queries để thay đổi bố cục, số cột, font size và các thành phần giao diện theo từng breakpoint. Responsive design giúp tối ưu trải nghiệm trên nhiều thiết bị khác nhau.
+
+
+# Câu C2 (10đ) — Thiết kế Responsive Strategy
+
+## 1. Yêu cầu hệ thống
+
+Trang web đặt bàn nhà hàng gồm:
+
+- Header (logo + số điện thoại đặt bàn)
+- Hero image toàn trang
+- Grid 6 ảnh món ăn
+- Form đặt bàn (ngày, giờ, số người, ghi chú)
+- Google Maps nhúng
+- Footer
+
+Thiết kế sử dụng **Mobile-First Responsive Design**.
+
+---
+
+# 2. Wireframe Layout
+
+## A. Mobile (<768px)
+
+### Wireframe
+
+```text
+┌──────────────────────┐
+│ HEADER               │
+│ Logo     ☎ Hotline  |
+├──────────────────────┤
+│ HERO IMAGE           │
+│     Full Width       │
+├──────────────────────┤
+│ FOOD GRID            │
+│ [img]                │
+│ [img]                │
+│ [img]                │
+│ [img]                │
+│ [img]                │
+│ [img]                │
+├──────────────────────┤
+│ BOOKING FORM         │
+│ Date                 │
+│ Time                 │
+│ Guests               │
+│ Note                 │
+│ [Reserve Button]     │
+├──────────────────────┤
+│ GOOGLE MAPS          │
+├──────────────────────┤
+│ FOOTER               │
+└──────────────────────┘
+```
+
+### Responsive Strategy (Mobile)
+
+**Những gì bị ẩn?**
+
+- Không ẩn thành phần chính.
+- Có thể ẩn Google Maps lớn hoặc giảm chiều cao map để tiết kiệm không gian.
+- Hero image được tối giản chiều cao.
+
+**Form nằm đâu?**
+
+- Form đặt bàn nằm **dưới grid món ăn**.
+- Hiển thị full width để dễ nhập liệu trên điện thoại.
+
+**Grid ảnh**
+
+- **1 cột**
+
+---
+
+## B. Tablet (768px – 1023px)
+
+### Wireframe
+
+```text
+┌────────────────────────────────┐
+│ HEADER                         │
+│ Logo                Hotline    │
+├────────────────────────────────┤
+│ HERO IMAGE                     │
+├────────────────────────────────┤
+│ FOOD GRID (2 columns)          │
+│ [img] [img]                    │
+│ [img] [img]                    │
+│ [img] [img]                    │
+├────────────────────────────────┤
+│ BOOKING FORM                   │
+├────────────────────────────────┤
+│ GOOGLE MAPS                    │
+├────────────────────────────────┤
+│ FOOTER                         │
+└────────────────────────────────┘
+```
+
+### Responsive Strategy (Tablet)
+
+**Grid ảnh mấy cột?**
+
+- **2 cột**
+
+**Bản đồ nằm đâu?**
+
+- Google Maps nằm **dưới form đặt bàn**.
+- Full width.
+
+**Navigation**
+
+- Header rộng hơn mobile.
+- Logo và hotline có khoảng cách thoáng hơn.
+
+---
+
+## C. Desktop (≥1024px)
+
+### Wireframe
+
+```text
+┌─────────────────────────────────────────────────────┐
+│ HEADER                                              │
+│ Logo                                     Hotline    │
+├─────────────────────────────────────────────────────┤
+│ HERO IMAGE                                          │
+├─────────────────────────────────────────────────────┤
+│ FOOD GRID (3 columns)         │ BOOKING FORM        │
+│ [img] [img] [img]             │ Date                │
+│ [img] [img] [img]             │ Time                │
+│                                │ Guests              │
+│                                │ Note                │
+│                                │ Reserve Button      │
+├─────────────────────────────────────────────────────┤
+│ GOOGLE MAPS                                        │
+├─────────────────────────────────────────────────────┤
+│ FOOTER                                             │
+└─────────────────────────────────────────────────────┘
+```
+
+### Responsive Strategy (Desktop)
+
+**Layout bao nhiêu cột?**
+
+- **2 cột chính**
+
+Ví dụ:
+
+- Trái: Food gallery
+- Phải: Booking form
+
+**Grid ảnh món ăn**
+
+- **3 cột**
+
+**Sidebar có không?**
+
+- **Có thể xem booking form như sidebar bên phải**.
+- Form được cố định ở cạnh phải giúp đặt bàn nhanh.
+
+---
+
+# 3. CSS Skeleton (Mobile-First)
+
+```css
+/* ======================
+   MOBILE FIRST
+====================== */
+
+body {
+    margin: 0;
+}
+
+.container {
+    display: grid;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Header */
+.header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+}
+
+/* Hero */
+.hero {
+    min-height: 300px;
+}
+
+/* Food grid */
+.food-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+}
+
+/* Booking form */
+.booking-form {
+    display: grid;
+    gap: 10px;
+}
+
+/* Google map */
+.map iframe {
+    width: 100%;
+    height: 300px;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+}
+
+/* ======================
+   TABLET
+====================== */
+
+@media (min-width: 768px) {
+
+    .food-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .hero {
+        min-height: 400px;
+    }
+}
+
+/* ======================
+   DESKTOP
+====================== */
+
+@media (min-width: 1024px) {
+
+    .content-layout {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 30px;
+    }
+
+    .food-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .hero {
+        min-height: 500px;
+    }
+}
+```
+
+---
+
+# 4. Kết luận
+
+Thiết kế responsive áp dụng **Mobile-First**:
+
+- **Mobile:** 1 cột, form nằm dưới gallery.
+- **Tablet:** gallery 2 cột, map dưới form.
+- **Desktop:** layout 2 cột, gallery 3 cột, form hoạt động như sidebar bên phải.
+
+Media Queries dùng:
+
+```css
+@media (min-width: 768px)
+@media (min-width: 1024px)
+```
+
+để mở rộng giao diện từ mobile → tablet → desktop.
