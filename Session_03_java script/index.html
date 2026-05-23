@@ -9,6 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
@@ -83,10 +84,6 @@
     </div><!-- /container -->
 
 
-    <!-- =====================================================
-     POPUP / MODAL - Form thêm và sửa sinh viên
-     Dùng chung một form cho cả hai chế độ (thêm / sửa)
-     ===================================================== -->
     <!-- id="studentModal" để JS lấy phần tử -->
     <div class="modal fade" id="studentModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -105,10 +102,6 @@
 
                 <!-- Body modal chứa form nhập liệu -->
                 <div class="modal-body">
-                    <!--
-          id="studentForm" - JS sẽ lắng nghe sự kiện submit
-          novalidate    - tắt validation mặc định của trình duyệt, dùng Bootstrap validation
-        -->
                     <form id="studentForm" novalidate>
 
                         <div class="row g-3">
@@ -198,7 +191,8 @@
     </div><!-- /modal -->
 
 
-    <!-- Bootstrap 5 JS Bundle (bao gồm Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+</body>
 
-    <script>
+</html>
