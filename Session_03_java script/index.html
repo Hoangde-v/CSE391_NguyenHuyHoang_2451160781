@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- ① Tiêu đề trang -->
+<header class="page-header">
+  <div class="container">
+    <h1 class="mb-0"><i class="bi bi-mortarboard-fill me-2"></i>Quản Lý Sinh Viên</h1>
+    <small class="opacity-75">Hệ thống quản lý thông tin sinh viên</small>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ② Khu vực thông báo kết quả thao tác (fixed góc trên phải) -->
+  <div id="notificationArea"></div>
+
+  <!-- ③ Khu vực thống kê -->
+  <div class="row mb-4 g-3">
+    <div class="col-sm-6 col-md-3">
+      <div class="card stat-card shadow-sm">
+        <div class="card-body">
+          <div class="text-muted small mb-1"><i class="bi bi-people-fill me-1"></i>Tổng sinh viên</div>
+          <div id="statTotal" class="fs-3 fw-bold text-primary">0</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+      <div class="card stat-card gpa shadow-sm">
+        <div class="card-body">
+          <div class="text-muted small mb-1"><i class="bi bi-bar-chart-fill me-1"></i>Điểm TB cả lớp</div>
+          <div id="statAvgGpa" class="fs-3 fw-bold text-success">0.00</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ④ Khu vực nút thêm -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="mb-0 text-secondary">Danh sách sinh viên</h5>
+    <!-- Nút mở form thêm sinh viên - sự kiện sẽ gắn ở JS -->
+    <button id="btnOpenForm" class="btn btn-primary">
+      <i class="bi bi-plus-circle me-1"></i>Thêm sinh viên
+    </button>
+  </div>
+
+  <!-- ⑤ Bảng hiển thị danh sách sinh viên -->
+  <div class="card shadow-sm">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover mb-0 align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>#</th>
+              <th>Mã SV</th>
+              <th>Họ và tên</th>
+              <th>Ngày sinh</th>
+              <th>Lớp</th>
+              <th>Điểm TB</th>
+              <th>Email</th>
+              <th class="text-center">Thao tác</th>
+            </tr>
+          </thead>
+          <!-- Phần thân bảng - sẽ được render bằng JavaScript -->
+          <tbody id="studentTableBody">
+            <!-- Dữ liệu sẽ được chèn vào đây bằng JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+
+<!-- =====================================================
+     POPUP / MODAL - Form thêm và sửa sinh viên
+     Dùng chung một form cho cả hai chế độ (thêm / sửa)
+     ===================================================== -->
+<!-- id="studentModal" để JS lấy phần tử -->
+<div class="modal fade" id="studentModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <!-- Header modal -->
+      <div class="modal-header bg-primary text-white">
+        <!-- Tiêu đề sẽ đổi giữa "Thêm" và "Sửa" tùy chế độ -->
+        <h5 class="modal-title" id="modalTitle">
+          <i class="bi bi-person-plus-fill me-2"></i>Thêm sinh viên mới
+        </h5>
+        <!-- Nút đóng form -->
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
+      </div>
+
+      <!-- Body modal chứa form nhập liệu -->
+      <div class="modal-body">
+        <!--
+          id="studentForm" - JS sẽ lắng nghe sự kiện submit
+          novalidate    - tắt validation mặc định của trình duyệt, dùng Bootstrap validation
+        -->
+        <form id="studentForm" novalidate>
+
+          <div class="row g-3">
+            <!-- Mã sinh viên -->
+            <div class="col-md-6">
+              <label for="inputMaSV" class="form-label fw-semibold">
+                Mã sinh viên <span class="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="inputMaSV"
+                placeholder="VD: SV001"
+                required
+                maxlength="20"
+              />
+              <div class="invalid-feedback">Vui lòng nhập mã sinh viên.</div>
+            </div>
+
+            <!-- Họ và tên -->
+            <div class="col-md-6">
+              <label for="inputHoTen" class="form-label fw-semibold">
+                Họ và tên <span class="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="inputHoTen"
+                placeholder="VD: Nguyễn Văn An"
+                required
+                maxlength="60"
+              />
+              <div class="invalid-feedback">Vui lòng nhập họ và tên.</div>
+            </div>
+
+            <!-- Ngày sinh -->
+            <div class="col-md-6">
+              <label for="inputNgaySinh" class="form-label fw-semibold">
+                Ngày sinh <span class="text-danger">*</span>
+              </label>
+              <input
+                type="date"
+                class="form-control"
+                id="inputNgaySinh"
+                required
+              />
+              <div class="invalid-feedback">Vui lòng chọn ngày sinh.</div>
+            </div>
+
+            <!-- Lớp học -->
+            <div class="col-md-6">
+              <label for="inputLop" class="form-label fw-semibold">
+                Lớp học <span class="text-danger">*</span>
+              </label>
+              <select class="form-select" id="inputLop" required>
+                <option value="">-- Chọn lớp --</option>
+                <option>CNTT01</option>
+                <option>CNTT02</option>
+                <option>KTPM01</option>
+                <option>KTPM02</option>
+                <option>HTTT01</option>
+              </select>
+              <div class="invalid-feedback">Vui lòng chọn lớp học.</div>
+            </div>
+
+            <!-- Điểm trung bình -->
+            <div class="col-md-6">
+              <label for="inputDiem" class="form-label fw-semibold">
+                Điểm trung bình <span class="text-danger">*</span>
+              </label>
+              <input
+                type="number"
+                class="form-control"
+                id="inputDiem"
+                placeholder="0.0 – 10.0"
+                min="0"
+                max="10"
+                step="0.1"
+                required
+              />
+              <div class="invalid-feedback">Điểm phải từ 0 đến 10.</div>
+            </div>
+
+            <!-- Email -->
+            <div class="col-md-6">
+              <label for="inputEmail" class="form-label fw-semibold">
+                Email <span class="text-danger">*</span>
+              </label>
+              <input
+                type="email"
+                class="form-control"
+                id="inputEmail"
+                placeholder="example@email.com"
+                required
+              />
+              <div class="invalid-feedback">Vui lòng nhập email hợp lệ.</div>
+            </div>
+          </div><!-- /row -->
+
+        </form>
+      </div><!-- /modal-body -->
+
+      <!-- Footer modal: nút Hủy và nút Lưu -->
+      <div class="modal-footer">
+        <!-- Nút đóng/hủy form -->
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          <i class="bi bi-x-circle me-1"></i>Hủy
+        </button>
+        <!-- Nút submit form - JS trigger submit event trên form -->
+        <button type="button" class="btn btn-primary" id="btnSave">
+          <i class="bi bi-save me-1"></i>Lưu
+        </button>
+      </div>
+
+    </div><!-- /modal-content -->
+  </div>
+</div><!-- /modal -->
+
+
+<!-- Bootstrap 5 JS Bundle (bao gồm Popper) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
