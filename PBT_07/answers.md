@@ -769,3 +769,352 @@ Template literal giúp:
 * Không cần nối chuỗi bằng `+`
 * Chèn biến bằng `${}`
 * Viết nhiều dòng dễ hơn (đặc biệt với HTML)
+
+
+# CÂU C1:
+
+## Code gốc
+
+```js
+function tinhGiaGiamGia(giaBan, phanTramGiam) {
+    if (phanTramGiam < 0 || phanTramGiam > 100) {
+        return "Phần trăm giảm không hợp lệ"
+    }
+    
+    var giamGia = giaBan * phanTramGiam / 100
+    let giaSauGiam = giaBan - giamGia
+    
+    if (giaSauGiam = 0) {
+        console.log("Sản phẩm miễn phí!")
+    }
+    
+    return giaSauGiam
+}
+
+// Test
+const gia = tinhGiaGiamGia("100000", 20)
+console.log("Giá sau giảm: " + gia + "đ")
+
+const gia2 = tinhGiaGiamGia(50000, 110)
+console.log("Giá: " + gia2)
+
+for (var i = 0; i < 5; i++) {
+    setTimeout(function() {
+        console.log("Item " + i)
+    }, 1000)
+}
+```
+
+---
+
+# 1. Lỗi dùng dấu `=` thay vì `===` trong điều kiện if
+
+## Lỗi
+
+```js
+if (giaSauGiam = 0)
+```
+
+## Giải thích
+
+Dấu `=` là phép **gán giá trị**, không phải phép so sánh.
+
+Code trên không kiểm tra `giaSauGiam` có bằng `0` không, mà đang gán:
+
+```js
+giaSauGiam = 0
+```
+
+Sau đó JavaScript sẽ kiểm tra:
+
+```js
+if (0)
+```
+
+Mà `0` là giá trị **false**, nên khối lệnh bên trong không chạy.
+
+Ngoài ra, giá trị của `giaSauGiam` cũng bị đổi thành `0`.
+
+## Cách sửa
+
+Dùng toán tử so sánh:
+
+```js
+if (giaSauGiam === 0)
+```
+
+Hoặc:
+
+```js
+if (giaSauGiam == 0)
+```
+
+Nhưng nên dùng `===` vì kiểm tra chặt chẽ hơn.
+
+### Sửa đúng
+
+```js
+if (giaSauGiam === 0) {
+    console.log("Sản phẩm miễn phí!")
+}
+```
+
+---
+
+# 2. Truyền chuỗi thay vì số cho `giaBan`
+
+## Lỗi
+
+```js
+const gia = tinhGiaGiamGia("100000", 20)
+```
+
+`"100000"` là **string**, không phải number.
+
+## Giải thích
+
+JavaScript có cơ chế ép kiểu tự động nên phép tính vẫn chạy:
+
+```js
+"100000" * 20 / 100
+```
+
+sẽ thành:
+
+```js
+20000
+```
+
+Tuy nhiên điều này không an toàn vì nếu truyền dữ liệu sai:
+
+```js
+"abc"
+```
+
+thì kết quả sẽ là:
+
+```js
+NaN
+```
+
+(NOT A NUMBER)
+
+## Cách sửa
+
+Truyền kiểu số:
+
+```js
+const gia = tinhGiaGiamGia(100000, 20)
+```
+
+Hoặc ép kiểu:
+
+```js
+Number(giaBan)
+```
+
+Ví dụ:
+
+```js
+giaBan = Number(giaBan)
+```
+
+---
+
+# 3. Thiếu kiểm tra kiểu dữ liệu đầu vào
+
+## Vấn đề
+
+Hàm không kiểm tra người dùng nhập đúng kiểu dữ liệu hay không.
+
+Ví dụ:
+
+```js
+tinhGiaGiamGia("abc", 20)
+```
+
+Kết quả:
+
+```js
+NaN
+```
+
+## Cách sửa
+
+Kiểm tra dữ liệu:
+
+```js
+if (isNaN(giaBan) || isNaN(phanTramGiam)) {
+    return "Dữ liệu không hợp lệ"
+}
+```
+
+Hoặc:
+
+```js
+if (typeof giaBan !== "number") {
+    return "Giá bán phải là số"
+}
+```
+
+---
+
+# 4. Lỗi "ẩn" của `var` trong vòng lặp
+
+## Code lỗi
+
+```js
+for (var i = 0; i < 5; i++) {
+    setTimeout(function() {
+        console.log("Item " + i)
+    }, 1000)
+}
+```
+
+## Kết quả thực tế
+
+Sau 1 giây sẽ in:
+
+Item 5
+Item 5
+Item 5
+Item 5
+Item 5
+
+Thay vì:
+
+```txt
+Item 0
+Item 1
+Item 2
+Item 3
+Item 4
+```
+
+## Nguyên nhân
+
+`var` có phạm vi **function scope**, không phải block scope.
+
+Trong vòng lặp:
+
+```js
+var i
+```
+
+thực tế chỉ có **1 biến i duy nhất**.
+
+Khi `setTimeout()` chạy sau 1 giây thì vòng lặp đã kết thúc:
+
+```js
+i = 5
+```
+
+Nên tất cả callback đều dùng cùng giá trị:
+
+```js
+5
+```
+
+### Minh họa
+
+Vòng lặp chạy xong:
+
+```txt
+i = 5
+```
+
+Sau đó callback mới chạy:
+
+```js
+console.log(i)
+```
+
+=> luôn là:
+
+```txt
+5
+```
+
+## Cách sửa bằng `let`
+
+Dùng:
+
+```js
+for (let i = 0; i < 5; i++) {
+```
+
+`let` có **block scope**.
+
+Mỗi lần lặp JavaScript tạo một bản sao riêng của `i`.
+
+### Code đúng
+
+```js
+for (let i = 0; i < 5; i++) {
+    setTimeout(function() {
+        console.log("Item " + i)
+    }, 1000)
+}
+```
+
+### Kết quả
+
+```txt
+Item 0
+Item 1
+Item 2
+Item 3
+Item 4
+```
+
+---
+
+# Code đã sửa hoàn chỉnh
+
+```js
+function tinhGiaGiamGia(giaBan, phanTramGiam) {
+
+    giaBan = Number(giaBan)
+
+    if (isNaN(giaBan) || isNaN(phanTramGiam)) {
+        return "Dữ liệu không hợp lệ"
+    }
+
+    if (phanTramGiam < 0 || phanTramGiam > 100) {
+        return "Phần trăm giảm không hợp lệ"
+    }
+
+    let giamGia = giaBan * phanTramGiam / 100
+    let giaSauGiam = giaBan - giamGia
+
+    if (giaSauGiam === 0) {
+        console.log("Sản phẩm miễn phí!")
+    }
+
+    return giaSauGiam
+}
+
+// Test
+const gia = tinhGiaGiamGia(100000, 20)
+console.log("Giá sau giảm: " + gia + "đ")
+
+const gia2 = tinhGiaGiamGia(50000, 110)
+console.log("Giá: " + gia2)
+
+for (let i = 0; i < 5; i++) {
+    setTimeout(function() {
+        console.log("Item " + i)
+    }, 1000)
+}
+```
+
+---
+
+# Tổng kết lỗi
+
+| Lỗi | Nguyên nhân | Cách sửa |
+|------|-------------|-----------|
+| `if (giaSauGiam = 0)` | dùng phép gán thay vì so sánh | `===` |
+| `"100000"` là string | ép kiểu ngầm gây rủi ro | dùng number |
+| Không validate input | có thể tạo `NaN` | dùng `Number()` + `isNaN()` |
+| `var` trong vòng lặp | function scope | đổi sang `let` |
