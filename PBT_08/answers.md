@@ -1131,3 +1131,272 @@ true
 - `specs: { ram, color }` không tạo biến `specs`
 - Spread (`...`) tạo object mới nhưng chỉ shallow copy
 - Nested object vẫn dùng chung reference nên có thể ảnh hưởng object gốc
+
+# Câu C1 :
+
+## Yêu cầu
+
+Refactor code cũ:
+
+- Dùng `filter()`
+- Dùng `map()`
+- Dùng `sort()`
+- Dùng destructuring
+- Dùng arrow function
+- ≤ 10 dòng code
+
+---
+
+## Code refactor
+
+```js
+const processOrders = orders =>
+    orders
+        .filter(order =>
+            order.status === "completed" &&
+            order.total > 100000
+        )
+        .map(({ id, customer, total }) => ({
+            id,
+            customer,
+            total,
+            discount: total * 0.1,
+            finalTotal: total * 0.9
+        }))
+        .sort((a, b) => b.finalTotal - a.finalTotal);
+```
+
+---
+
+## Giải thích
+
+### `filter()`
+
+Lọc đơn hàng:
+
+```js
+status === "completed"
+```
+
+và:
+
+```js
+total > 100000
+```
+
+---
+
+### `map()`
+
+Dùng destructuring:
+
+```js
+({ id, customer, total })
+```
+
+để lấy dữ liệu cần thiết và tạo object mới.
+
+Tính:
+
+```js
+discount = total * 0.1
+```
+
+```js
+finalTotal = total * 0.9
+```
+
+---
+
+### `sort()`
+
+Sắp xếp giảm dần:
+
+```js
+b.finalTotal - a.finalTotal
+```
+
+---
+
+## Ưu điểm sau refactor
+
+- Ngắn hơn
+- Dễ đọc hơn
+- Không cần vòng lặp lồng nhau
+- Không dùng `var`
+- Không cần tự swap thủ công
+
+---
+
+# Câu C2:
+
+## Yêu cầu
+
+Tự viết:
+
+```js
+map()
+filter()
+reduce()
+```
+
+Không dùng built-in:
+
+```js
+.map()
+.filter()
+.reduce()
+```
+
+---
+
+## Code
+
+```js
+const miniArray = {
+
+    map(arr, fn) {
+
+        const result = [];
+
+        for (let i = 0; i < arr.length; i++) {
+            result.push(fn(arr[i], i, arr));
+        }
+
+        return result;
+    },
+
+
+    filter(arr, fn) {
+
+        const result = [];
+
+        for (let i = 0; i < arr.length; i++) {
+
+            if (fn(arr[i], i, arr)) {
+                result.push(arr[i]);
+            }
+        }
+
+        return result;
+    },
+
+
+    reduce(arr, fn, initialValue) {
+
+        let accumulator = initialValue;
+
+        for (let i = 0; i < arr.length; i++) {
+            accumulator = fn(
+                accumulator,
+                arr[i],
+                i,
+                arr
+            );
+        }
+
+        return accumulator;
+    }
+};
+```
+
+---
+
+## Test
+
+```js
+console.log(
+    miniArray.map([1,2,3], x => x * 2)
+);
+// [2,4,6]
+
+console.log(
+    miniArray.filter([1,2,3,4], x => x > 2)
+);
+// [3,4]
+
+console.log(
+    miniArray.reduce(
+        [1,2,3,4],
+        (a,b) => a+b,
+        0
+    )
+);
+// 10
+```
+
+---
+
+## Giải thích
+
+### `map()`
+
+Đi qua từng phần tử:
+
+```js
+fn(arr[i])
+```
+
+rồi lưu kết quả vào:
+
+```js
+result
+```
+
+Ví dụ:
+
+```txt
+[1,2,3]
+```
+
+nhân đôi:
+
+```txt
+[2,4,6]
+```
+
+---
+
+### `filter()`
+
+Chỉ thêm phần tử nếu điều kiện đúng:
+
+```js
+if (fn(arr[i]))
+```
+
+Ví dụ:
+
+```txt
+x > 2
+```
+
+Kết quả:
+
+```txt
+[3,4]
+```
+
+---
+
+### `reduce()`
+
+Gộp nhiều giá trị thành một giá trị.
+
+Ví dụ:
+
+```txt
+1 + 2 + 3 + 4
+```
+
+Thông qua:
+
+```js
+accumulator
+```
+
+Kết quả:
+
+```txt
+10
+```
