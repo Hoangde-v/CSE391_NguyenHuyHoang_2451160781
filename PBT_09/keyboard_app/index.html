@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+  <title>Keyboard App</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="container">
+    <h1>Keyboard Accessibility App</h1>
+
+    <div class="gallery">
+      <button
+        id="prevBtn"
+        aria-label="Previous image"
+      >
+        ◀
+      </button>
+
+      <img
+        id="galleryImage"
+        src=""
+        alt="Gallery image"
+        tabindex="0"
+      />
+
+      <button
+        id="nextBtn"
+        aria-label="Next image"
+      >
+        ▶
+      </button>
+    </div>
+
+    <div class="controls">
+      <button
+        id="openModal"
+        aria-label="Open image modal"
+      >
+        Open Modal
+      </button>
+    </div>
+
+    <p class="help">
+      Shortcuts:
+      ← → navigate |
+      1-9 jump image |
+      Space play/pause |
+      Ctrl+K command palette |
+      ESC close
+    </p>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

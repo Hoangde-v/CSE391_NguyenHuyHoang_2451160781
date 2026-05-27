@@ -1,0 +1,110 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  min-height: 100vh;
+  padding: 40px;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 30px;
+}
+
+.gallery {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.gallery img {
+  width: 700px;
+  max-width: 100%;
+  border-radius: 20px;
+}
+
+button {
+  border: none;
+  background: royalblue;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.controls {
+  margin-top: 20px;
+}
+
+.help {
+  margin-top: 20px;
+}
+
+button:focus,
+input:focus,
+img:focus {
+  outline: 4px solid orange;
+  outline-offset: 4px;
+}
+
+.modal-overlay,
+.palette-overlay {
+  position: fixed;
+  inset: 0;
+  background:
+    rgba(0,0,0,.6);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.modal img {
+  width: 700px;
+  max-width: 100%;
+}
+
+.command-palette {
+  width: 500px;
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.command-palette input {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.command-list {
+  list-style: none;
+}
+
+.command-item {
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.command-item:hover,
+.command-item.active {
+  background: #eee;
+}
