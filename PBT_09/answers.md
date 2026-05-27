@@ -448,3 +448,478 @@ Có thể chặn bằng:
 ```js
 e.stopPropagation()
 ```
+
+CÂU C1 (8đ) — DEBUG DOM CODE
+
+1. Code đã sửa hoàn chỉnh
+
+```javascript
+// App: Counter with history
+
+const countDisplay =
+  document.querySelector(".count");
+
+const historyList =
+  document.getElementById("history");
+
+let count = 0;
+
+// Load localStorage trước
+window.addEventListener("load", () => {
+  const savedCount =
+    localStorage.getItem("count");
+
+  const savedHistory =
+    localStorage.getItem("history");
+
+  count = savedCount
+    ? Number(savedCount)
+    : 0;
+
+  countDisplay.textContent =
+    count;
+
+  if (savedHistory) {
+    historyList.innerHTML =
+      savedHistory;
+  }
+});
+
+// Increment
+document
+  .querySelector("#incrementBtn")
+  .addEventListener(
+    "click",
+    function () {
+      count++;
+
+      countDisplay.textContent =
+        count;
+
+      // Lưu history
+      const li =
+        document.createElement("li");
+
+      li.textContent =
+        "Count changed to " +
+        count;
+
+      li.addEventListener(
+        "click",
+        function () {
+          deleteHistory(this);
+        }
+      );
+
+      historyList.appendChild(
+        li
+      );
+    }
+  );
+
+// Decrement
+document
+  .querySelector(
+    "#decrementBtn"
+  )
+  .addEventListener(
+    "click",
+    function () {
+      count--;
+
+      countDisplay.textContent =
+        count;
+    }
+  );
+
+// Reset
+document
+  .querySelector("#resetBtn")
+  .addEventListener(
+    "click",
+    () => {
+      count = 0;
+
+      countDisplay.textContent =
+        count;
+
+      historyList.innerHTML =
+        "";
+    }
+  );
+
+function deleteHistory(
+  element
+) {
+  element.remove();
+}
+
+// Clear all history
+document
+  .querySelector(
+    "#clearHistory"
+  )
+  .addEventListener(
+    "click",
+    () => {
+      const items =
+        historyList.querySelectorAll(
+          "li"
+        );
+
+      items.forEach(item => {
+        item.remove();
+      });
+    }
+  );
+
+// Save to localStorage
+window.addEventListener(
+  "beforeunload",
+  () => {
+    localStorage.setItem(
+      "count",
+      count
+    );
+
+    localStorage.setItem(
+      "history",
+      historyList.innerHTML
+    );
+  }
+);
+```
+
+
+2. Các lỗi đã sửa (ít nhất 7 lỗi)
+
+Lỗi 1:
+Sai:
+
+```javascript
+.addEventListener("onclick", ...)
+```
+
+Đúng:
+
+```javascript
+.addEventListener("click", ...)
+```
+
+Giải thích:
+`addEventListener()` dùng `"click"` chứ không dùng `"onclick"`.
+
+
+Lỗi 2:
+Sai:
+
+```javascript
+countDisplay = count;
+```
+
+Đúng:
+
+```javascript
+countDisplay.textContent =
+  count;
+```
+
+Giải thích:
+`countDisplay` là DOM element, không thể gán trực tiếp bằng số.
+
+
+Lỗi 3:
+Sai:
+
+```javascript
+historyList.innerHTML = null;
+```
+
+Đúng:
+
+```javascript
+historyList.innerHTML = "";
+```
+
+Giải thích:
+Xóa HTML nên dùng chuỗi rỗng.
+
+
+Lỗi 4:
+Sai:
+
+```javascript
+item.remove;
+```
+
+Đúng:
+
+```javascript
+item.remove();
+```
+
+Giải thích:
+Thiếu dấu `()` nên function không chạy.
+
+
+Lỗi 5:
+Sai:
+
+```javascript
+count =
+  localStorage.getItem("count");
+```
+
+Đúng:
+
+```javascript
+count =
+  Number(
+    localStorage.getItem(
+      "count"
+    )
+  );
+```
+
+Giải thích:
+`localStorage` trả về string, cần ép kiểu số.
+
+
+Lỗi 6:
+Sai:
+Load chỉ count nhưng không load history.
+
+Đúng:
+
+```javascript
+historyList.innerHTML =
+  savedHistory;
+```
+
+Giải thích:
+Phải restore history từ localStorage.
+
+
+Lỗi 7:
+Sai:
+
+```javascript
+countDisplay.innerHTML
+```
+
+Đúng hơn:
+
+```javascript
+countDisplay.textContent
+```
+
+Giải thích:
+Hiển thị text nên dùng `textContent` an toàn hơn.
+
+
+Lỗi 8:
+Sai:
+
+```javascript
+element.parentNode.removeChild(
+  element
+);
+```
+
+Đúng gọn hơn:
+
+```javascript
+element.remove();
+```
+
+Giải thích:
+Code ngắn hơn, hiện đại hơn.
+
+
+Lỗi 9:
+Sai:
+Reset xóa history nhưng không update count UI đúng cách.
+
+Đúng:
+
+```javascript
+countDisplay.textContent =
+  count;
+```
+
+Giải thích:
+Reset cần cập nhật DOM.
+
+
+=================================================
+
+CÂU C2 (7đ) — PERFORMANCE
+
+1. Vì sao bind event lên 1000 elements riêng lẻ là BAD PRACTICE?
+
+Ví dụ xấu:
+
+```javascript
+items.forEach(item => {
+  item.addEventListener(
+    "click",
+    function () {}
+  );
+});
+```
+
+Vấn đề:
+
+- Tốn nhiều memory vì tạo 1000 event listeners
+- Hiệu năng giảm khi DOM lớn
+- Khó maintain code
+- Khi thêm element mới phải bind lại event
+
+Nếu có 1000 phần tử thì browser phải quản lý 1000 listeners riêng biệt.
+
+
+2. Event Delegation giải quyết như thế nào?
+
+Ý tưởng:
+
+Không bind từng element.
+
+Chỉ bind 1 event lên parent.
+
+Ví dụ:
+
+```javascript
+parent.addEventListener(
+  "click",
+  function (e) {
+    if (
+      e.target.matches(
+        ".item"
+      )
+    ) {
+      console.log(
+        "clicked"
+      );
+    }
+  }
+);
+```
+
+Cách hoạt động:
+
+Event dùng cơ chế bubbling.
+
+Click child → event nổi lên parent.
+
+Parent kiểm tra:
+
+```javascript
+e.target
+```
+
+để biết user click vào đâu.
+
+Ưu điểm:
+
+- Chỉ cần 1 listener
+- Ít memory hơn
+- Dễ maintain
+- Element tạo động vẫn hoạt động
+
+
+3. Refactor dùng DocumentFragment
+
+Code gốc:
+
+```javascript
+for (let i = 0; i < 1000; i++) {
+  const div =
+    document.createElement(
+      "div"
+    );
+
+  div.textContent =
+    `Item ${i}`;
+
+  document.body.appendChild(
+    div
+  );
+}
+```
+
+Vấn đề:
+
+```javascript
+appendChild()
+```
+
+chạy 1000 lần trên DOM thật.
+
+Browser phải:
+
+- repaint
+- reflow
+- recalculate layout
+
+liên tục.
+
+
+Code refactor:
+
+```javascript
+const fragment =
+  document.createDocumentFragment();
+
+for (
+  let i = 0;
+  i < 1000;
+  i++
+) {
+  const div =
+    document.createElement(
+      "div"
+    );
+
+  div.textContent =
+    `Item ${i}`;
+
+  fragment.appendChild(
+    div
+  );
+}
+
+document.body.appendChild(
+  fragment
+);
+```
+
+
+4. Tại sao nhanh hơn?
+
+`DocumentFragment`
+
+là DOM ảo (temporary container).
+
+Các element được build trong memory trước.
+
+Thay vì:
+
+```txt
+1000 lần append vào DOM thật
+→ 1000 lần reflow/repaint
+```
+
+ta có:
+
+```txt
+Build trong fragment
+→ append 1 lần
+→ chỉ 1 lần reflow
+```
+
+Kết quả:
+
+- Render nhanh hơn
+- Giảm repaint/reflow
+- Tốn ít CPU hơn
+- Tốt cho danh sách lớn
