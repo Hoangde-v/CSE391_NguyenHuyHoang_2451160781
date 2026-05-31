@@ -1804,3 +1804,5 @@ Promise nào xong trước dùng trước
 ```txt
 Promise thành công đầu tiên
 ```
+
+Link Video : https://drive.google.com/file/d/1Nnh1fXxGeXOn7hmMLH81mOfhgG6QYUzI/view?usp=drive_link  
