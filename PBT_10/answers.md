@@ -1100,3 +1100,707 @@ login
 * Callback Hell là callback lồng quá nhiều cấp gây khó đọc và khó bảo trì.
 
 * `async/await` giúp viết code bất đồng bộ dễ hiểu hơn, tránh callback hell và xử lý lỗi tốt hơn.
+
+
+# Câu C1 (10đ) — Error Handling Strategy
+
+Giả sử đang xây dựng một app **E-Commerce** gọi nhiều APIs:
+
+* Product API
+* Payment API
+* Inventory API
+* Recommendation API
+
+Trong thực tế cần có chiến lược xử lý lỗi phù hợp để tránh crash ứng dụng và cải thiện trải nghiệm người dùng.
+
+---
+
+# 1. Network Errors (mất mạng giữa chừng)
+
+## Tình huống
+
+Ví dụ:
+
+* mất WiFi
+* server unreachable
+* DNS lỗi
+* internet chập chờn
+
+Lỗi thường gặp:
+
+```txt
+TypeError: Failed to fetch
+```
+
+---
+
+## Chiến lược xử lý
+
+### Không crash app
+
+Hiện thông báo:
+
+```txt
+Không có kết nối mạng
+Vui lòng thử lại
+```
+
+---
+
+### Retry request
+
+Tự thử lại vài lần.
+
+Ví dụ:
+
+```txt
+Retry 1
+Retry 2
+Retry 3
+```
+
+---
+
+### Cache dữ liệu cũ
+
+Nếu có LocalStorage hoặc cache:
+
+```txt
+Hiển thị dữ liệu cũ
+```
+
+thay vì màn hình trắng.
+
+---
+
+## Code xử lý network error
+
+```js
+async function fetchProducts() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/products"
+            );
+
+        const data =
+            await response.json();
+
+        return data;
+
+    } catch (error) {
+
+        console.error(
+            "Network error:",
+            error.message
+        );
+
+        alert(
+            "Mất kết nối mạng"
+        );
+    }
+}
+```
+
+---
+
+# 2. API Errors
+
+API có thể trả về lỗi HTTP khác nhau.
+
+## 404 — Not Found
+
+### Tình huống
+
+Ví dụ:
+
+```txt
+/api/products/999
+```
+
+không tồn tại.
+
+### Cách xử lý
+
+Hiện:
+
+```txt
+Sản phẩm không tồn tại
+```
+
+### Code
+
+```js
+if (response.status === 404) {
+    throw new Error(
+        "Product not found"
+    );
+}
+```
+
+---
+
+## 500 — Internal Server Error
+
+### Tình huống
+
+Server bị crash hoặc lỗi database.
+
+### Cách xử lý
+
+Hiện:
+
+```txt
+Server đang bảo trì
+Vui lòng thử lại sau
+```
+
+### Code
+
+```js
+if (response.status === 500) {
+    throw new Error(
+        "Server error"
+    );
+}
+```
+
+---
+
+## 429 — Too Many Requests
+
+### Tình huống
+
+Spam API quá nhiều.
+
+Ví dụ:
+
+```txt
+Refresh liên tục
+```
+
+### Cách xử lý
+
+* Delay request
+* Hiện thông báo
+* Retry sau vài giây
+
+Ví dụ:
+
+```txt
+Bạn thao tác quá nhanh
+Thử lại sau vài giây
+```
+
+### Code
+
+```js
+if (response.status === 429) {
+    throw new Error(
+        "Too many requests"
+    );
+}
+```
+
+---
+
+## Tổng hợp API Error Handling
+
+```js
+async function fetchData() {
+
+    try {
+
+        const response =
+            await fetch("/api");
+
+        if (response.status === 404) {
+            throw new Error(
+                "404 Not Found"
+            );
+        }
+
+        if (response.status === 500) {
+            throw new Error(
+                "500 Server Error"
+            );
+        }
+
+        if (response.status === 429) {
+            throw new Error(
+                "429 Too Many Requests"
+            );
+        }
+
+        return response.json();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(error.message);
+    }
+}
+```
+
+---
+
+# 3. Timeout (>10 giây)
+
+## Tình huống
+
+API quá chậm.
+
+Ví dụ:
+
+```txt
+Payment API bị lag
+```
+
+Nếu chờ vô hạn:
+
+```txt
+UX rất tệ
+```
+
+---
+
+## Chiến lược xử lý
+
+Nếu quá:
+
+```txt
+10 giây
+```
+
+→ cancel request.
+
+Thông báo:
+
+```txt
+Request timeout
+```
+
+---
+
+## Code fetchWithTimeout(url, ms)
+
+```js
+async function fetchWithTimeout(
+    url,
+    ms = 10000
+) {
+
+    const controller =
+        new AbortController();
+
+    const timeout =
+        setTimeout(() => {
+            controller.abort();
+        }, ms);
+
+    try {
+
+        const response =
+            await fetch(url, {
+                signal:
+                    controller.signal
+            });
+
+        clearTimeout(timeout);
+
+        return response.json();
+
+    } catch (error) {
+
+        if (
+            error.name
+            === "AbortError"
+        ) {
+
+            throw new Error(
+                "Request timeout"
+            );
+        }
+
+        throw error;
+    }
+}
+```
+
+---
+
+## Ví dụ dùng
+
+```js
+fetchWithTimeout(
+    "/api/products",
+    10000
+)
+.then(data => {
+    console.log(data);
+})
+.catch(error => {
+    console.error(error.message);
+});
+```
+
+---
+
+# 4. Retry Logic
+
+## Tình huống
+
+Mạng chập chờn.
+
+Lần đầu fail nhưng lần sau thành công.
+
+Ví dụ:
+
+```txt
+Retry 3 lần
+```
+
+---
+
+## Chiến lược xử lý
+
+Nếu:
+
+```txt
+network error
+```
+
+→ retry tối đa:
+
+```txt
+3 lần
+```
+
+Nếu vẫn fail:
+
+```txt
+show error
+```
+
+---
+
+## Code fetchWithRetry(url, maxRetries)
+
+```js
+async function fetchWithRetry(
+    url,
+    maxRetries = 3
+) {
+
+    for (
+        let attempt = 1;
+        attempt <= maxRetries;
+        attempt++
+    ) {
+
+        try {
+
+            const response =
+                await fetch(url);
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `HTTP ${response.status}`
+                );
+            }
+
+            return response.json();
+
+        } catch (error) {
+
+            console.log(
+                `Retry ${attempt}`
+            );
+
+            if (
+                attempt
+                === maxRetries
+            ) {
+
+                throw new Error(
+                    "Failed after retries"
+                );
+            }
+        }
+    }
+}
+```
+
+---
+
+## Ví dụ dùng
+
+```js
+fetchWithRetry(
+    "/api/products",
+    3
+)
+.then(data => {
+    console.log(data);
+})
+.catch(error => {
+    console.error(error.message);
+});
+```
+
+---
+
+# 5. Kết luận
+
+| Lỗi           | Cách xử lý         |
+| ------------- | ------------------ |
+| Network error | retry + alert      |
+| 404           | báo không tìm thấy |
+| 500           | báo server lỗi     |
+| 429           | chờ rồi retry      |
+| Timeout       | cancel request     |
+| API chậm      | timeout 10 giây    |
+
+---
+
+# Câu C2 (10đ) — Promise.all vs Promise.allSettled vs Promise.race vs Promise.any
+
+## Bảng so sánh
+
+| Method          | Khi nào resolve?            | Khi nào reject?        | Use case             |
+| --------------- | --------------------------- | ---------------------- | -------------------- |
+| `.all()`        | tất cả Promise thành công   | chỉ cần 1 Promise fail | load data bắt buộc   |
+| `.allSettled()` | khi tất cả hoàn thành       | không reject           | dashboard nhiều APIs |
+| `.race()`       | Promise đầu tiên hoàn thành | Promise đầu tiên fail  | timeout              |
+| `.any()`        | Promise đầu tiên thành công | tất cả fail            | fallback server      |
+
+---
+
+# 1. Promise.all()
+
+## Khi nào dùng?
+
+Khi tất cả data đều bắt buộc phải có.
+
+Ví dụ:
+
+Trang checkout:
+
+* cart
+* payment
+* inventory
+
+Thiếu một cái:
+
+```txt
+không checkout được
+```
+
+---
+
+## Code
+
+```js
+async function loadCheckout() {
+
+    try {
+
+        const [
+            products,
+            inventory,
+            payment
+        ] = await Promise.all([
+
+            fetch("/api/products")
+                .then(r => r.json()),
+
+            fetch("/api/inventory")
+                .then(r => r.json()),
+
+            fetch("/api/payment")
+                .then(r => r.json())
+        ]);
+
+        console.log(
+            products,
+            inventory,
+            payment
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Checkout failed"
+        );
+    }
+}
+```
+
+---
+
+# 2. Promise.allSettled()
+
+## Khi nào dùng?
+
+Dashboard nhiều widget.
+
+Ví dụ:
+
+* weather
+* recommendation
+* news
+
+Một widget lỗi:
+
+```txt
+widget khác vẫn chạy
+```
+
+---
+
+## Code
+
+```js
+async function loadDashboard() {
+
+    const results =
+        await Promise.allSettled([
+
+            fetch("/api/weather")
+                .then(r => r.json()),
+
+            fetch("/api/news")
+                .then(r => r.json()),
+
+            fetch("/api/recommendation")
+                .then(r => r.json())
+        ]);
+
+    console.log(results);
+}
+```
+
+---
+
+# 3. Promise.race()
+
+## Khi nào dùng?
+
+Timeout request.
+
+Promise nào hoàn thành trước sẽ thắng.
+
+---
+
+## Code
+
+```js
+async function fetchWithTimeout() {
+
+    const response =
+        await Promise.race([
+
+            fetch("/api/products"),
+
+            new Promise((_, reject) => {
+
+                setTimeout(() => {
+
+                    reject(
+                        new Error(
+                            "Timeout"
+                        )
+                    );
+
+                }, 10000);
+            })
+        ]);
+
+    return response.json();
+}
+```
+
+---
+
+# 4. Promise.any()
+
+## Khi nào dùng?
+
+Fallback server.
+
+Ví dụ:
+
+Có nhiều CDN:
+
+```txt
+server1
+server2
+server3
+```
+
+Server nào phản hồi trước thì dùng.
+
+---
+
+## Code
+
+```js
+async function loadAvatar() {
+
+    const avatar =
+        await Promise.any([
+
+            fetch(
+                "https://cdn1.com/avatar"
+            ),
+
+            fetch(
+                "https://cdn2.com/avatar"
+            ),
+
+            fetch(
+                "https://cdn3.com/avatar"
+            )
+        ]);
+
+    console.log(avatar);
+}
+```
+
+---
+
+# 5. Kết luận
+
+### Promise.all()
+
+```txt
+Bắt buộc tất cả thành công
+```
+
+---
+
+### Promise.allSettled()
+
+```txt
+Cho phép vài API lỗi
+```
+
+---
+
+### Promise.race()
+
+```txt
+Promise nào xong trước dùng trước
+```
+
+---
+
+### Promise.any()
+
+```txt
+Promise thành công đầu tiên
+```
